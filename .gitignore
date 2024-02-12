@@ -130,6 +130,6 @@ dist
 .pnp.*
 
 # folders
-+ build/**
-+ dist/**
-+ .next/**
+build/**
+dist/**
+.next/**

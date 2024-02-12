@@ -8,7 +8,7 @@
         "stylelint-check": "stylelint-config-prettier-check",
         "prettier:check": "pnpm prettier --check .",
         "format": "pnpm prettier --write .",
-        "lint": "pnpm eslint ."
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
     },
     "lint-staged": {
         "**/*.{js,ts,jsx,tsx}": [
