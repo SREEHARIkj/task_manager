@@ -1,10 +1,13 @@
 import { RouterProvider } from 'react-router-dom';
 import { routes } from './Routes';
+import { TasksProvider } from './providers/TasksProvider';
 
 function App() {
     return (
         <>
-            <RouterProvider router={routes} />
+            <TasksProvider>
+                <RouterProvider router={routes} />
+            </TasksProvider>
         </>
     );
 }

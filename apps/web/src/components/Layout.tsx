@@ -36,7 +36,7 @@ const Layout: React.FC = () => {
                                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Search</NavigationMenuLink>
                             </NavigationMenuItem>
                             <Button onClick={() => navigate('/new-task')}>New task</Button>
-                            <Button>
+                            <Button onClick={() => navigate('/board')}>
                                 <TableProperties size={'15px'} />
                             </Button>
                             <Button>
