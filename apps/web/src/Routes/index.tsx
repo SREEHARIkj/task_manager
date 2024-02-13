@@ -4,7 +4,7 @@ import ErrorBoundary from '../components/ErrorBoundary';
 import Layout from '../components/Layout';
 import NewTask from '@/pages/NewTask';
 import MyTasks from '@/pages/MyTasks';
-import GridView from '@/pages/GridView';
+import Board from '@/pages/Board';
 
 export const routes = createBrowserRouter(
     createRoutesFromElements(
@@ -14,7 +14,7 @@ export const routes = createBrowserRouter(
                 <Route path="home" element={<HomePage />} />
                 <Route path="my-tasks" element={<MyTasks />} />
                 <Route path="new-task" element={<NewTask />} />
-                <Route path="grid-view" element={<GridView />} />
+                <Route path="board" element={<Board />} />
             </Route>
             <Route
                 path="/login"
