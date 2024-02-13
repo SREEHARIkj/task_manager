@@ -9,7 +9,10 @@ interface StyledInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const StyledInput: React.FC<StyledInputProps> = ({ className, ...args }) => (
-    <Input className={cn(className, 'text-[#637587] bg-[#F0F2F5] border-0 rounded-xl')} {...args} />
+    <Input
+        className={cn(className, 'text-[#637587] bg-[#F0F2F5] border-0 rounded-xl placeholder:font-normal')}
+        {...args}
+    />
 );
 
 const NewTask: React.FC = () => {
@@ -23,7 +26,11 @@ const NewTask: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-2 py-3 h-fit w-full">
                     <Label className="text-[14px] font-semibold">Description</Label>
-                    <StyledInput className="h-32 w-full" type="text" placeholder="Add more details" />
+                    <StyledInput
+                        className="h-32 w-full placeholder:fixed placeholder:top-[15px] placeholder:left-[12px] "
+                        type="text"
+                        placeholder="Add more details...."
+                    />
                 </div>
                 <div className="flex flex-col gap-2 py-3 w-full">
                     <Label className="text-[14px] font-semibold">Due Date</Label>

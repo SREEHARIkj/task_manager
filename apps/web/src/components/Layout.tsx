@@ -6,12 +6,13 @@ import {
     NavigationMenuList,
     navigationMenuTriggerStyle,
 } from './ui/navigation-menu';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, Navigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Bell, TableProperties } from 'lucide-react';
 
 const Layout: React.FC = () => {
     const navigate = useNavigate();
+    const isAuthenticated = true;
     return (
         <div className="flex flex-col h-screen gap-8">
             <header className=" py-2 flex flex-col gap-2">
@@ -46,9 +47,7 @@ const Layout: React.FC = () => {
                 </div>
                 <div className="w-full border-b-[.5px] border-gray-300 blur-[1px]"></div>
             </header>
-            <div>
-                <Outlet />
-            </div>
+            <div>{isAuthenticated ? <Outlet /> : <Navigate to="/login" replace={true} />}</div>
         </div>
     );
 };

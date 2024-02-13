@@ -3,15 +3,27 @@ import HomePage from '../pages/HomePage';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Layout from '../components/Layout';
 import NewTask from '@/pages/NewTask';
-import MyTasks from '@/lib/MyTasks';
+import MyTasks from '@/pages/MyTasks';
+import GridView from '@/pages/GridView';
 
 export const routes = createBrowserRouter(
     createRoutesFromElements(
-        <Route path="/" element={<Layout />} errorElement={<ErrorBoundary />}>
-            <Route index element={<Navigate to={'home'} replace />} />
-            <Route path="home" element={<HomePage />} />
-            <Route path="my-tasks" element={<MyTasks />} />
-            <Route path="new-task" element={<NewTask />} />
+        <Route>
+            <Route path="/*" element={<Layout />} errorElement={<ErrorBoundary />}>
+                <Route index element={<Navigate to={'home'} replace />} />
+                <Route path="home" element={<HomePage />} />
+                <Route path="my-tasks" element={<MyTasks />} />
+                <Route path="new-task" element={<NewTask />} />
+                <Route path="grid-view" element={<GridView />} />
+            </Route>
+            <Route
+                path="/login"
+                element={
+                    <>
+                        <h2>Admin Area</h2>
+                    </>
+                }
+            />
             <Route path="*" element={<h1>Not Found</h1>} />
         </Route>
     )
