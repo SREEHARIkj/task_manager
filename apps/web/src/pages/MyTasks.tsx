@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import React, { HTMLAttributes } from 'react';
-import { cn } from './utils';
+import { cn } from '../lib/utils';
 import { Pencil } from 'lucide-react';
 
 type StyledHeadingProps = HTMLAttributes<HTMLDivElement> & { className?: string };
