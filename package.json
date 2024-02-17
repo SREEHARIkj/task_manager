@@ -2,6 +2,7 @@
     "name": "task_manager",
     "version": "1.0.0",
     "description": "",
+    "type": "module",
     "scripts": {
         "test": "pnpm --filter web test",
         "prepare": "husky",
@@ -26,7 +27,7 @@
         "husky": "^9.0.10",
         "lint-staged": "^15.2.2",
         "prettier": "3.2.5",
-        "stylelint-config-prettier": "^9.0.5",
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "typescript-eslint": "^7.0.1"
     }
 }

@@ -1,13 +1,17 @@
-export type TaskType = {
+export interface TaskType {
   id: string;
   title: string;
   description: string;
   dueDate: string;
   priority: string;
   status: string;
-};
+}
 
-export type StatusOptionType = { value: string; label: string; color: string };
+export interface StatusOptionType {
+  value: string;
+  label: string;
+  color: string;
+}
 
 export const Tasks = [
   {

@@ -133,3 +133,5 @@ dist
 build/**
 dist/**
 .next/**
+
+./apps/api/.build/*
