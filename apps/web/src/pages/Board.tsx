@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSetTasks, useTasks } from '@/providers/TasksProvider';
 
-type DropContainerProps = {
+interface DropContainerProps {
     index: number;
     status: string;
-};
+}
 
 const DraggableCard = ({ title, description, priority, id, status }: TaskType & { status: string }) => {
     const [editable, setEditable] = useState(false);
@@ -62,7 +62,7 @@ const DropContainer: React.FC<DropContainerProps> = ({ index, status }) => {
         const data = e.dataTransfer.getData('text');
         if (!!data && isActive) {
             const updatedTask: TaskType[] | undefined = tasks?.map((task) =>
-                task.id === data ? { ...task, status: status as string } : task
+                task.id === data ? { ...task, status: status } : task
             );
             updatedTask && setTasks?.(updatedTask);
         }
@@ -140,7 +140,7 @@ const AddTask = ({
                     ...pv,
                     {
                         id: (pv.length + 1).toString(),
-                        status: status || 'Todo',
+                        status: status ?? 'Todo',
                         dueDate: '',
                         priority: 'high',
                         ...updatedData,
@@ -186,7 +186,7 @@ const AddTask = ({
                                 onChange={handleOnChange}
                             />
                             <section className="flex flex-row justify-end items-center gap-3">
-                                <span>{priority || null}</span>
+                                <span>{priority ?? null}</span>
                                 <Button type="submit">Save</Button>
                                 <Button
                                     variant={'secondary'}
