@@ -1,10 +1,11 @@
-import { StatusOptionType, StatusOptions, TaskType } from '@/const';
+import { StatusOptionType, StatusOptions, TaskType } from '@/constants/const';
 import { cn } from '@/lib/utils';
 import React, { ChangeEvent, DragEvent, FormEvent, useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSetTasks, useTasks } from '@/providers/TasksProvider';
+import moment from 'moment';
 
 interface DropContainerProps {
     index: number;
@@ -16,6 +17,10 @@ const DraggableCard = ({ title, description, priority, id, status }: TaskType & 
     const handleDragStart = (e: DragEvent) => {
         e.dataTransfer.setData('text/plain', id);
     };
+    function handleDragEnd(e: DragEvent<HTMLDivElement>): void {
+        e.dataTransfer.clearData();
+    }
+
     return (
         <>
             {editable ? (
@@ -26,6 +31,7 @@ const DraggableCard = ({ title, description, priority, id, status }: TaskType & 
                     key={`draggable-${id}`}
                     className="mb-2 cursor-grab active:cursor-grabbing bg-[#F0F2F5]"
                     onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
                     onDoubleClickCapture={() => setEditable(true)}
                 >
                     <CardHeader>
@@ -155,7 +161,7 @@ const AddTask = ({
         const { name, value } = event.target;
         if (isEditable) {
             const taskToEdit = tasks?.find(({ id: _id }) => _id === id);
-            setUpdatedData({ ...taskToEdit, [name]: value } as TaskType);
+            setUpdatedData({ ...taskToEdit, [name]: value, createdAt: moment(new Date()).toISOString() } as TaskType);
             return;
         }
         setUpdatedData((pv) => ({ ...pv, [name]: value || '' }) as { title: string; description: string } | undefined);

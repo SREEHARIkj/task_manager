@@ -1,12 +1,15 @@
-import { TaskType, Tasks } from '@/const';
-import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react';
+import { TaskType } from '@/constants/const';
+import { getAllTasks } from '@/service';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 
 const TasksContext = createContext<{
     tasks: TaskType[] | undefined;
     setTasks: Dispatch<SetStateAction<TaskType[]>> | undefined;
+    getAllUpdatedTasks: () => void;
 }>({
     tasks: undefined,
     setTasks: undefined,
+    getAllUpdatedTasks: () => {},
 });
 
 export const useTasks = () => {
@@ -20,6 +23,16 @@ export const useSetTasks = () => {
 };
 
 export const TasksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [tasks, setTasks] = useState<TaskType[]>(Tasks);
-    return <TasksContext.Provider value={{ tasks, setTasks }}>{children}</TasksContext.Provider>;
+    const [tasks, setTasks] = useState<TaskType[]>([]);
+
+    const getAllUpdatedTasks = async () => {
+        const response = await getAllTasks();
+        setTasks?.(() => (response?.data?.length ? response?.data : []));
+    };
+
+    useEffect(() => {
+        getAllUpdatedTasks();
+    }, []);
+
+    return <TasksContext.Provider value={{ tasks, setTasks, getAllUpdatedTasks }}>{children}</TasksContext.Provider>;
 };

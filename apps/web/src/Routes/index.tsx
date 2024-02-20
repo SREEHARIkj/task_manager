@@ -5,6 +5,7 @@ import Layout from '../components/Layout';
 import NewTask from '@/pages/NewTask';
 import MyTasks from '@/pages/MyTasks';
 import Board from '@/pages/Board';
+import { getTask } from '@/service';
 
 export const routes = createBrowserRouter(
     createRoutesFromElements(
@@ -13,7 +14,10 @@ export const routes = createBrowserRouter(
                 <Route index element={<Navigate to={'home'} replace />} />
                 <Route path="home" element={<HomePage />} />
                 <Route path="my-tasks" element={<MyTasks />} />
-                <Route path="new-task" element={<NewTask />} />
+                <Route path="task">
+                    <Route index element={<NewTask />} />
+                    <Route path=":id" element={<NewTask />} loader={({ params: { id } }) => getTask(id)} />
+                </Route>
                 <Route path="board" element={<Board />} />
             </Route>
             <Route
