@@ -6,10 +6,14 @@ const TasksContext = createContext<{
     tasks: TaskType[] | undefined;
     setTasks: Dispatch<SetStateAction<TaskType[]>> | undefined;
     getAllUpdatedTasks: () => void;
+    dragStarted: boolean;
+    setDragStarted: (param: boolean) => void;
 }>({
     tasks: undefined,
     setTasks: undefined,
     getAllUpdatedTasks: () => {},
+    dragStarted: false,
+    setDragStarted: (data = false) => data,
 });
 
 export const useTasks = () => {
@@ -22,8 +26,19 @@ export const useSetTasks = () => {
     return setTasks;
 };
 
+export const useDragStatus = () => {
+    const { dragStarted } = useContext(TasksContext);
+    return dragStarted;
+};
+
+export const useSetDragStatus = () => {
+    const { setDragStarted } = useContext(TasksContext);
+    return setDragStarted;
+};
+
 export const TasksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [tasks, setTasks] = useState<TaskType[]>([]);
+    const [dragStarted, setDragStarted] = useState<boolean>(false);
 
     const getAllUpdatedTasks = async () => {
         const response = await getAllTasks();
@@ -34,5 +49,9 @@ export const TasksProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         getAllUpdatedTasks();
     }, []);
 
-    return <TasksContext.Provider value={{ tasks, setTasks, getAllUpdatedTasks }}>{children}</TasksContext.Provider>;
+    return (
+        <TasksContext.Provider value={{ tasks, setTasks, getAllUpdatedTasks, dragStarted, setDragStarted }}>
+            {children}
+        </TasksContext.Provider>
+    );
 };

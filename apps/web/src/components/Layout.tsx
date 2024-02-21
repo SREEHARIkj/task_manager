@@ -16,7 +16,7 @@ const Layout: React.FC = () => {
     return (
         <div className="flex flex-col h-screen gap-8">
             <header className=" py-2 flex flex-col gap-2">
-                <div className="flex flex-col w-full h-fit fixed top-0 bg-white">
+                <div className="flex flex-col w-full h-fit fixed top-0 bg-white z-10">
                     <div className="px-10 my-2 flex flex-row justify-between items-center">
                         <span className="font-bold text-[20px] pl-10">Task Manager</span>
                         <NavigationMenu>

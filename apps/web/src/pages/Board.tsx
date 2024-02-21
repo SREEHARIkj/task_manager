@@ -4,8 +4,20 @@ import React, { ChangeEvent, DragEvent, FormEvent, useEffect, useState } from 'r
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useSetTasks, useTasks } from '@/providers/TasksProvider';
+import { useDragStatus, useSetDragStatus, useSetTasks, useTasks } from '@/providers/TasksProvider';
 import moment from 'moment';
+import { Trash2 } from 'lucide-react';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface DropContainerProps {
     index: number;
@@ -14,11 +26,14 @@ interface DropContainerProps {
 
 const DraggableCard = ({ title, description, priority, id, status }: TaskType & { status: string }) => {
     const [editable, setEditable] = useState(false);
+    const setDragStatus = useSetDragStatus();
     const handleDragStart = (e: DragEvent) => {
         e.dataTransfer.setData('text/plain', id);
+        setDragStatus(true);
     };
     function handleDragEnd(e: DragEvent<HTMLDivElement>): void {
         e.dataTransfer.clearData();
+        setDragStatus(false);
     }
 
     return (
@@ -54,6 +69,7 @@ const DropContainer: React.FC<DropContainerProps> = ({ index, status }) => {
     const [isActive, setActive] = useState<boolean>(false);
     const tasks = useTasks();
     const setTasks = useSetTasks();
+    const setDragStatus = useSetDragStatus();
 
     const handleDragOver = (e: DragEvent) => {
         e.preventDefault();
@@ -73,6 +89,7 @@ const DropContainer: React.FC<DropContainerProps> = ({ index, status }) => {
             updatedTask && setTasks?.(updatedTask);
         }
         setActive(false);
+        setDragStatus(false);
     };
 
     return (
@@ -215,15 +232,71 @@ const AddTask = ({
     );
 };
 
+const DeleteDropArea: React.FC = () => {
+    const isDropZoneActive = useDragStatus();
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+    };
+
+    function handleFileDroppedOnDeleteField(event: DragEvent<HTMLDivElement>): void {
+        event.preventDefault();
+        setShowAlert(true);
+    }
+
+    const handleCancel = () => setShowAlert(false);
+
+    return (
+        <>
+            <AlertDialog open={showAlert}>
+                <AlertDialogTrigger asChild>
+                    <div
+                        className={cn(
+                            `fixed bottom-24 rounded-full p-2 outline-dotted outline-offset-4 outline-gray-600/30 
+                    transition-opacity ease-linear duration-300
+                    flex justify-center items-center size-16 bg-red-300 `,
+                            {
+                                'opacity-0': !isDropZoneActive,
+                                'opacity-100': isDropZoneActive,
+                            }
+                        )}
+                        onDrop={handleFileDroppedOnDeleteField}
+                        onDropCapture={handleFileDroppedOnDeleteField}
+                        onDragOver={handleDragOver}
+                    >
+                        {isDropZoneActive && <Trash2 />}
+                    </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete task you are selected.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
+                        <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
+    );
+};
+
 const Board: React.FC = () => {
     return (
-        <div className="flex flex-row gap-3 px-16">
-            {StatusOptions.map(({ label, color, value }: StatusOptionType, index) => (
-                <div key={`${value}-${index}`} className="flex flex-col gap-4 flex-1">
-                    <ColumnHeading title={label} color={color} />
-                    <DropContainer index={index} status={value} />
-                </div>
-            ))}
+        <div className="flex flex-col items-center h-screen px-16 relative ">
+            <DeleteDropArea />
+            <div className="flex flex-row gap-3">
+                {StatusOptions.map(({ label, color, value }: StatusOptionType, index) => (
+                    <div key={`${value}-${index}`} className="flex flex-col gap-4 flex-1">
+                        <ColumnHeading title={label} color={color} />
+                        <DropContainer index={index} status={value} />
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
