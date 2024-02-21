@@ -1,6 +1,10 @@
 import express from 'express';
+import { createServer } from 'https';
+import fs from 'fs';
+import path from 'path';
 import cors from 'cors';
-import { TaskType, Tasks } from './constants/const.js';
+import taskRouter from './routes/tasks.js';
+import configureSocketIO from './sockets/index.js';
 // Todo: convert http to https
 
 const app = express();
@@ -12,55 +16,27 @@ const corsOptions = {
 app.use(express.json());
 app.use(cors(corsOptions)); // allow all origins for development purposes only
 // const port = process.env.PORT || 3000;
+
+const options = {
+  key: fs.readFileSync(path.join(__dirname, 'localhost-key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'localhost.pem')),
+};
+
+// Create HTTPS server
+
 const port = 3000;
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.get('/api/tasks', (req, res) => {
-  res.json({ data: Tasks, count: Tasks.length });
-});
-app.get('/api/task/:id', (req, res) => {
-  const taskId = req.params.id;
-  const task = Tasks.find((t) => t.id === taskId);
-  res.json({ data: task });
-});
+//task related routes
+app.use('/api/tasks', taskRouter);
 
-app.post('/api/add-task', (req: express.Request<{ title: string; description: string }>, res: express.Response) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { title } = req.body;
-  if (!title) return res.status(400).json({ error: 'Missing title' });
-  const newTask = {
-    id: (Math.floor(Math.random()) * 10).toString(),
-    createdAt: Date.now().toString(),
-    ...req.body,
-    priority: 'high',
-    status: 'Todo',
-    dueDate: '',
-  } as TaskType;
-  Tasks.push(newTask);
-  res.json({ data: newTask });
-});
+// Pass the HTTPS server instance to configure Socket.IO
+configureSocketIO(app);
 
-app.put('/api/update-task/:id', (req, res) => {
-  const taskId = req.params.id;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { title, description }: { title: string; description: string } = req.body;
-  const taskIndex = Tasks.findIndex((t) => t.id === taskId);
-  if (taskIndex < 0) return res.status(404).json({ error: 'Not found.' });
-  Tasks[taskIndex] = { ...Tasks[taskIndex], title, description };
-  res.json({ data: Tasks[taskIndex] });
-});
-
-app.delete('/api/remove-task/:id', (req, res) => {
-  const taskId = req.params.id;
-  const taskIndex = Tasks.findIndex((t) => t.id === taskId);
-  if (taskIndex < 0) return res.status(404).json({ error: 'Not found.' });
-  Tasks.splice(taskIndex, 1);
-  res.json({ message: `Deleted task with id ${taskId}` });
-});
-
-app.listen(port, () => {
+const httpsServer = createServer(options, app);
+httpsServer.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
