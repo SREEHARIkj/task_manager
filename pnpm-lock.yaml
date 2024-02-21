@@ -40,12 +40,27 @@ importers:
             '@tsconfig/node21':
                 specifier: ^21.0.1
                 version: 21.0.1
+            add:
+                specifier: ^2.0.6
+                version: 2.0.6
             cors:
                 specifier: ^2.8.5
                 version: 2.8.5
             express:
                 specifier: ^4.18.2
                 version: 4.18.2
+            fs:
+                specifier: 0.0.1-security
+                version: 0.0.1-security
+            https:
+                specifier: ^1.0.0
+                version: 1.0.0
+            pnpm:
+                specifier: ^8.15.3
+                version: 8.15.3
+            socket.io:
+                specifier: ^4.7.4
+                version: 4.7.4
         devDependencies:
             '@types/cors':
                 specifier: ^2.8.17
@@ -68,6 +83,9 @@ importers:
             '@radix-ui/react-accordion':
                 specifier: ^1.1.2
                 version: 1.1.2(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-alert-dialog':
+                specifier: ^1.0.5
+                version: 1.0.5(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
             '@radix-ui/react-avatar':
                 specifier: ^1.0.4
                 version: 1.0.4(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
@@ -125,6 +143,9 @@ importers:
             react-router-dom:
                 specifier: ^6.22.0
                 version: 6.22.0(react-dom@18.2.0)(react@18.2.0)
+            socket.io:
+                specifier: ^4.7.4
+                version: 4.7.4
             tailwind-merge:
                 specifier: ^2.2.1
                 version: 2.2.1
@@ -723,6 +744,35 @@ packages:
             '@radix-ui/react-id': 1.0.1(@types/react@18.2.55)(react@18.2.0)
             '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
             '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.55)(react@18.2.0)
+            '@types/react': 18.2.55
+            '@types/react-dom': 18.2.19
+            react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
+        dev: false
+
+    /@radix-ui/react-alert-dialog@1.0.5(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-OrVIOcZL0tl6xibeuGt5/+UxoT2N27KCFOPjFyfXMnchxSHZ/OW7cCX2nGlIYJrbHK/fczPcFzAwvNBB6XBNMA==,
+            }
+        peerDependencies:
+            '@types/react': '*'
+            '@types/react-dom': '*'
+            react: ^16.8 || ^17.0 || ^18.0
+            react-dom: ^16.8 || ^17.0 || ^18.0
+        peerDependenciesMeta:
+            '@types/react':
+                optional: true
+            '@types/react-dom':
+                optional: true
+        dependencies:
+            '@babel/runtime': 7.23.9
+            '@radix-ui/primitive': 1.0.1
+            '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.55)(react@18.2.0)
+            '@radix-ui/react-context': 1.0.1(@types/react@18.2.55)(react@18.2.0)
+            '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.55)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-slot': 1.0.2(@types/react@18.2.55)(react@18.2.0)
             '@types/react': 18.2.55
             '@types/react-dom': 18.2.19
             react: 18.2.0
@@ -1608,6 +1658,13 @@ packages:
         dev: true
         optional: true
 
+    /@socket.io/component-emitter@3.1.0:
+        resolution:
+            {
+                integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==,
+            }
+        dev: false
+
     /@swc/core-darwin-arm64@1.4.0:
         resolution:
             {
@@ -1796,6 +1853,13 @@ packages:
             '@types/node': 20.11.17
         dev: true
 
+    /@types/cookie@0.4.1:
+        resolution:
+            {
+                integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==,
+            }
+        dev: false
+
     /@types/cors@2.8.17:
         resolution:
             {
@@ -1803,7 +1867,6 @@ packages:
             }
         dependencies:
             '@types/node': 20.11.17
-        dev: true
 
     /@types/estree@1.0.5:
         resolution:
@@ -1871,7 +1934,6 @@ packages:
             }
         dependencies:
             undici-types: 5.26.5
-        dev: true
 
     /@types/prop-types@15.7.11:
         resolution:
@@ -2316,6 +2378,13 @@ packages:
         hasBin: true
         dev: true
 
+    /add@2.0.6:
+        resolution:
+            {
+                integrity: sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==,
+            }
+        dev: false
+
     /ajv@6.12.6:
         resolution:
             {
@@ -2466,6 +2535,14 @@ packages:
             {
                 integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==,
             }
+
+    /base64id@2.0.0:
+        resolution:
+            {
+                integrity: sha512-lGe34o6EHj9y3Kts9R4ZYs/Gr+6N7MCaMlIFA3F1R2O5/m7K06AxfSeO5530PEERE6/WyEg3lsuyw4GHlPZHog==,
+            }
+        engines: { node: ^4.5.0 || >= 5.9 }
+        dev: false
 
     /binary-extensions@2.2.0:
         resolution:
@@ -2743,6 +2820,14 @@ packages:
             }
         dev: false
 
+    /cookie@0.4.2:
+        resolution:
+            {
+                integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==,
+            }
+        engines: { node: '>= 0.6' }
+        dev: false
+
     /cookie@0.5.0:
         resolution:
             {
@@ -2822,7 +2907,6 @@ packages:
         dependencies:
             ms: 2.1.2
             supports-color: 5.5.0
-        dev: true
 
     /deep-is@0.1.4:
         resolution:
@@ -2951,6 +3035,37 @@ packages:
                 integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==,
             }
         engines: { node: '>= 0.8' }
+        dev: false
+
+    /engine.io-parser@5.2.2:
+        resolution:
+            {
+                integrity: sha512-RcyUFKA93/CXH20l4SoVvzZfrSDMOTUS3bWVpTt2FuFP+XYrL8i8oonHP7WInRyVHXh0n/ORtoeiE1os+8qkSw==,
+            }
+        engines: { node: '>=10.0.0' }
+        dev: false
+
+    /engine.io@6.5.4:
+        resolution:
+            {
+                integrity: sha512-KdVSDKhVKyOi+r5uEabrDLZw2qXStVvCsEB/LN3mw4WFi6Gx50jTyuxYVCwAAC0U46FdnzP/ScKRBTXb/NiEOg==,
+            }
+        engines: { node: '>=10.2.0' }
+        dependencies:
+            '@types/cookie': 0.4.1
+            '@types/cors': 2.8.17
+            '@types/node': 20.11.17
+            accepts: 1.3.8
+            base64id: 2.0.0
+            cookie: 0.4.2
+            cors: 2.8.5
+            debug: 4.3.4(supports-color@5.5.0)
+            engine.io-parser: 5.2.2
+            ws: 8.11.0
+        transitivePeerDependencies:
+            - bufferutil
+            - supports-color
+            - utf-8-validate
         dev: false
 
     /es-define-property@1.0.0:
@@ -3429,6 +3544,13 @@ packages:
             }
         dev: true
 
+    /fs@0.0.1-security:
+        resolution:
+            {
+                integrity: sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==,
+            }
+        dev: false
+
     /fsevents@2.3.3:
         resolution:
             {
@@ -3576,7 +3698,6 @@ packages:
                 integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==,
             }
         engines: { node: '>=4' }
-        dev: true
 
     /has-flag@4.0.0:
         resolution:
@@ -3632,6 +3753,13 @@ packages:
             setprototypeof: 1.2.0
             statuses: 2.0.1
             toidentifier: 1.0.1
+        dev: false
+
+    /https@1.0.0:
+        resolution:
+            {
+                integrity: sha512-4EC57ddXrkaF0x83Oj8sM6SLQHAWXw90Skqu2M4AEWENZ3F02dFJE/GARA8igO79tcgYqGrD7ae4f5L3um2lgg==,
+            }
         dev: false
 
     /human-signals@5.0.0:
@@ -4151,7 +4279,6 @@ packages:
             {
                 integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==,
             }
-        dev: true
 
     /ms@2.1.3:
         resolution:
@@ -4465,6 +4592,15 @@ packages:
                 integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==,
             }
         engines: { node: '>= 6' }
+
+    /pnpm@8.15.3:
+        resolution:
+            {
+                integrity: sha512-3YXNbspkF8b3PbMroetHZ/+0y6T1vwcnhGciyStrnlaizCGLEThbvCsh8YoWpn2nes6um2Gg9WoWQ7JeH7amBQ==,
+            }
+        engines: { node: '>=16.14' }
+        hasBin: true
+        dev: false
 
     /postcss-import@15.1.0(postcss@8.4.35):
         resolution:
@@ -5053,6 +5189,53 @@ packages:
             is-fullwidth-code-point: 5.0.0
         dev: true
 
+    /socket.io-adapter@2.5.3:
+        resolution:
+            {
+                integrity: sha512-OtkQtynXUM0JSEwmI6YlEJ5hU9kpDUVjda0hx8QVffKhqum53xhynH8eTCyjHSfI8FiJnyfK8I3Dlc88Jr81Dg==,
+            }
+        dependencies:
+            debug: 4.3.4(supports-color@5.5.0)
+            ws: 8.11.0
+        transitivePeerDependencies:
+            - bufferutil
+            - supports-color
+            - utf-8-validate
+        dev: false
+
+    /socket.io-parser@4.2.4:
+        resolution:
+            {
+                integrity: sha512-/GbIKmo8ioc+NIWIhwdecY0ge+qVBSMdgxGygevmdHj24bsfgtCmcUUcQ5ZzcylGFHsN3k4HB4Cgkl96KVnuew==,
+            }
+        engines: { node: '>=10.0.0' }
+        dependencies:
+            '@socket.io/component-emitter': 3.1.0
+            debug: 4.3.4(supports-color@5.5.0)
+        transitivePeerDependencies:
+            - supports-color
+        dev: false
+
+    /socket.io@4.7.4:
+        resolution:
+            {
+                integrity: sha512-DcotgfP1Zg9iP/dH9zvAQcWrE0TtbMVwXmlV4T4mqsvY+gw+LqUGPfx2AoVyRk0FLME+GQhufDMyacFmw7ksqw==,
+            }
+        engines: { node: '>=10.2.0' }
+        dependencies:
+            accepts: 1.3.8
+            base64id: 2.0.0
+            cors: 2.8.5
+            debug: 4.3.4(supports-color@5.5.0)
+            engine.io: 6.5.4
+            socket.io-adapter: 2.5.3
+            socket.io-parser: 4.2.4
+        transitivePeerDependencies:
+            - bufferutil
+            - supports-color
+            - utf-8-validate
+        dev: false
+
     /source-map-js@1.0.2:
         resolution:
             {
@@ -5168,7 +5351,6 @@ packages:
         engines: { node: '>=4' }
         dependencies:
             has-flag: 3.0.0
-        dev: true
 
     /supports-color@7.2.0:
         resolution:
@@ -5395,7 +5577,6 @@ packages:
             {
                 integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==,
             }
-        dev: true
 
     /unpipe@1.0.0:
         resolution:
@@ -5593,6 +5774,22 @@ packages:
                 integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==,
             }
         dev: true
+
+    /ws@8.11.0:
+        resolution:
+            {
+                integrity: sha512-HPG3wQd9sNQoT9xHyNCXoDUa+Xw/VevmY9FoHyQ+g+rrMn4j6FB4np7Z0OhdTgjx6MgQLK7jwSy1YecU1+4Asg==,
+            }
+        engines: { node: '>=10.0.0' }
+        peerDependencies:
+            bufferutil: ^4.0.1
+            utf-8-validate: ^5.0.2
+        peerDependenciesMeta:
+            bufferutil:
+                optional: true
+            utf-8-validate:
+                optional: true
+        dev: false
 
     /yallist@4.0.0:
         resolution:

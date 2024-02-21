@@ -16,10 +16,6 @@ export interface StatusOptionType {
 
 export const consts = {
   tasks: '/tasks',
-  task: '/task',
-  updateTask: '/update-task',
-  removeTask: '/remove-task',
-  addTask: '/add-task',
 };
 
 export const StatusOptions = [
