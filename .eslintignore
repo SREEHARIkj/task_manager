@@ -6,5 +6,5 @@ node_modules/
 *.lock.json
 tailwind.config.js
 
-**/src/components/ui/*tsx
+apps/web/src/components/ui/*.tsx
 **/.build/*

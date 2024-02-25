@@ -1,0 +1,37 @@
+version: '3.8'
+
+networks:
+    networkOne:
+        driver: bridge
+
+services:
+    web:
+        ports:
+            - 5000:5000
+        build: ./apps/web
+        networks:
+            - networkOne
+        develop:
+            watch:
+                - action: sync
+                  path: ./apps/web/src
+                  target: ./src
+                  ignore:
+                      - node_modules/
+                - action: rebuild
+                  path: package.json
+    api:
+        ports:
+            - 3000:3000
+        build: ./apps/api
+        networks:
+            - networkOne
+        develop:
+            watch:
+                - action: sync
+                  path: ./apps/api/src
+                  target: ./src
+                  ignore:
+                      - node_modules/
+                - action: rebuild
+                  path: package.json
