@@ -2,5 +2,5 @@
     "watch": ["src"],
     "ext": ".js,.ts",
     "ignore": [],
-    "exec": "tsc && node --inspect --env-file=.env.dev .build/src/server.js"
+    "exec": "cp -u key.pem cert.pem .build/src/ && tsc && node --inspect --env-file=.env.dev .build/src/server.js"
 }

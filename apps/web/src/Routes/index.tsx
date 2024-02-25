@@ -16,7 +16,7 @@ export const routes = createBrowserRouter(
                 <Route path="my-tasks" element={<MyTasks />} />
                 <Route path="task">
                     <Route index element={<NewTask />} />
-                    <Route path=":id" element={<NewTask />} loader={({ params: { id } }) => getTask(id)} />
+                    <Route path=":id" element={<NewTask />} loader={({ params: { id } }) => getTask(id as string)} />
                 </Route>
                 <Route path="board" element={<Board />} />
             </Route>

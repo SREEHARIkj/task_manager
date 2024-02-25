@@ -1,11 +1,12 @@
 import express from 'express';
 import { createServer } from 'https';
+import { createServer as createHTTPServer } from 'http';
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import taskRouter from './routes/tasks.js';
 import configureSocketIO from './sockets/index.js';
-// Todo: convert http to https
+import { fileURLToPath } from 'url';
 
 const app = express();
 const corsOptions = {
@@ -17,26 +18,30 @@ app.use(express.json());
 app.use(cors(corsOptions)); // allow all origins for development purposes only
 // const port = process.env.PORT || 3000;
 
-const options = {
-  key: fs.readFileSync(path.join(__dirname, 'localhost-key.pem')),
-  cert: fs.readFileSync(path.join(__dirname, 'localhost.pem')),
-};
-
-// Create HTTPS server
-
 const port = 3000;
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 //task related routes
 app.use('/api/tasks', taskRouter);
 
 // Pass the HTTPS server instance to configure Socket.IO
-configureSocketIO(app);
+const server = (ENV: string | undefined) => {
+  if (ENV === 'production') {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const options = {
+      key: fs.readFileSync(path.join(__dirname, 'key.pem')),
+      cert: fs.readFileSync(path.join(__dirname, 'cert.pem')),
+    };
+    const httpsServer = createServer(options, app);
+    configureSocketIO(httpsServer);
+    return httpsServer;
+  } else {
+    const httpServer = createHTTPServer(app);
+    configureSocketIO(httpServer);
+    return httpServer;
+  }
+};
 
-const httpsServer = createServer(options, app);
-httpsServer.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+server(process.env.NODE_ENV).listen(port, () => {
+  console.log(`Task manager app listening on port ${port}`);
 });
