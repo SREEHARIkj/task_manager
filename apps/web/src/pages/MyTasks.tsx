@@ -66,7 +66,8 @@ const MyTasks: React.FC = () => {
     };
 
     const updatedTasks = useMemo(() => {
-        return Object.groupBy(tasks, ({ createdAt }) => {
+        if (tasks === undefined || !Object.keys(tasks)) return [];
+        return Object.groupBy(tasks as TaskType[], ({ createdAt }) => {
             return moment(new Date(createdAt)).calendar(null, {
                 sameDay: '[Today]',
                 nextDay: '[Tomorrow]',
@@ -87,14 +88,15 @@ const MyTasks: React.FC = () => {
                     <Button>Sort</Button>
                 </div>
 
-                {Object.keys?.(updatedTasks)?.map((dateTime, titleIndex) => (
-                    <React.Fragment key={`title-myTasks-${titleIndex}`}>
-                        <StyledHeading>{dateTime}</StyledHeading>
-                        {updatedTasks?.[dateTime]?.map((task, taskIndex) => (
-                            <TaskItem key={`Task-Item-${titleIndex}-${taskIndex}-${task.id}`} {...task} />
-                        ))}
-                    </React.Fragment>
-                ))}
+                {updatedTasks.length &&
+                    Object.entries?.(updatedTasks)?.map(([dateTime, value], titleIndex) => (
+                        <React.Fragment key={`title-myTasks-${titleIndex}`}>
+                            <StyledHeading>{dateTime}</StyledHeading>
+                            {value?.map((task, taskIndex) => (
+                                <TaskItem key={`Task-Item-${titleIndex}-${taskIndex}-${task.id}`} {...task} />
+                            ))}
+                        </React.Fragment>
+                    ))}
             </div>
         </div>
     );

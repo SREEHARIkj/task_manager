@@ -2,7 +2,6 @@
     "compilerOptions": {
         "target": "es5",
         "module": "Node16",
-        "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
@@ -11,7 +10,13 @@
         "declaration": true,
         "composite": true,
         "allowJs": true,
-        "rootDir": "./"
+        "rootDir": "./",
+
+        // Linting
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true
     },
     "include": ["src/**/*.tsx"],
     "references": [{ "path": "./apps/api" }, { "path": "./apps/web" }]
