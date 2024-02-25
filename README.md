@@ -1,5 +1,5 @@
 # Task Manger 
-####(🚧 Under Development 🚧)
+🚧 Under Development 🚧
 
 Task Manager is a web application that allows users to create, manage, and organize their tasks. It consists of a frontend built with React for the user interface and a backend built with Node.js and Express for handling data storage and retrieval.
 
