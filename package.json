@@ -13,7 +13,8 @@
         "prettier:check": "pnpm prettier --check .",
         "format": "pnpm prettier --write .",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "build": "cpy -u ./*.key ./*.crt ./.build/src && tsc"
+        "build": "cpy -u ./*.key ./*.crt ./.build/src && tsc",
+        "dev:docker": "docker compose up"
     },
     "lint-staged": {
         "**/*.{js,ts,jsx,tsx}": [
