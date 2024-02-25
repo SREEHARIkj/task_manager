@@ -12,7 +12,8 @@
         "stylelint-check": "stylelint-config-prettier-check",
         "prettier:check": "pnpm prettier --check .",
         "format": "pnpm prettier --write .",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "build": "cpy -u ./*.key ./*.crt ./.build/src && tsc"
     },
     "lint-staged": {
         "**/*.{js,ts,jsx,tsx}": [

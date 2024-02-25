@@ -9,12 +9,16 @@ import {
 import { Outlet, useNavigate, Navigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Bell, TableProperties } from 'lucide-react';
+import { useSetCursorStatus } from '@/providers/CursorDetailsProvider';
 
 const Layout: React.FC = () => {
     const navigate = useNavigate();
+    const setCursorStatus = useSetCursorStatus();
     const isAuthenticated = true;
+    const handleMouseEnter = () => setCursorStatus(false); // disable cursor on menu hovering
+    const handleMouseLeave = () => setCursorStatus(true); // enable cursor on menu hovering
     return (
-        <div className="flex flex-col h-screen gap-8">
+        <div className="flex flex-col h-screen gap-8" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <header className=" py-2 flex flex-col gap-2">
                 <div className="flex flex-col w-full h-fit fixed top-0 bg-white z-10">
                     <div className="px-10 my-2 flex flex-row justify-between items-center">
