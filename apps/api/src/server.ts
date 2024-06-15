@@ -5,6 +5,8 @@ import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import taskRouter from './routes/tasks.js';
+import priorityRouter from './routes/priorities.js';
+import statusRouter from './routes/statuses.js';
 import configureSocketIO from './sockets/index.js';
 import { fileURLToPath } from 'url';
 
@@ -22,6 +24,12 @@ const port = 3000;
 
 //task related routes
 app.use('/api/tasks', taskRouter);
+
+//priority related routes
+app.use('/api/priorities', priorityRouter);
+
+//status related routes
+app.use('/api/statuses', statusRouter);
 
 // Pass the HTTPS server instance to configure Socket.IO
 const server = (ENV: string | undefined) => {

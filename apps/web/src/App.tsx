@@ -3,6 +3,7 @@ import { routes } from './Routes';
 import { TasksProvider } from './providers/TasksProvider';
 import { useEffect } from 'react';
 import { CursorDetailsProvider } from './providers/CursorDetailsProvider';
+import { Toaster } from './components/ui/toaster';
 
 function App() {
     useEffect(() => {
@@ -29,6 +30,7 @@ function App() {
             <CursorDetailsProvider>
                 <TasksProvider>
                     <RouterProvider router={routes} />
+                    <Toaster />
                 </TasksProvider>
             </CursorDetailsProvider>
         </>

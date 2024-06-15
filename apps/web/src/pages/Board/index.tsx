@@ -1,4 +1,4 @@
-import { StatusOptionType, StatusOptions } from '@/constants/const';
+import { StatusOptionType } from '@/constants/const';
 import React, { useEffect, useId, useMemo, useState } from 'react';
 import { DeleteDropArea } from './DeleteDropArea';
 import { ColumnHeading } from './ColumnHeading';
@@ -7,6 +7,7 @@ import { socket } from '@/lib/utils/socketConfig';
 import { MousePointer2 } from 'lucide-react';
 import { useCursorStatus } from '@/providers/CursorDetailsProvider';
 import useMousePosition from '@/Hooks/useMousePosition';
+import { useTaskStatuses } from '@/providers/TasksProvider';
 
 export interface DropContainerProps {
     index: number;
@@ -25,6 +26,7 @@ const Board: React.FC = () => {
     const mousePosition = useMousePosition();
     const { cursorStatus: isCusrorLeaved } = useCursorStatus();
     const { isDragActive } = useCursorStatus();
+    const statusOptions = useTaskStatuses();
 
     const userId = useId();
 
@@ -57,8 +59,6 @@ const Board: React.FC = () => {
         });
     }, [mousePosition]);
 
-    // console.log(mousePosition);
-
     const filteredMousePointerList = useMemo(() => {
         const list = userAndPointers?.filter((i) => i.id !== localStorage.getItem('tabId'));
 
@@ -79,11 +79,11 @@ const Board: React.FC = () => {
     return (
         <div className="flex flex-col items-center h-screen px-16 relative ">
             <DeleteDropArea />
-            <div className="flex flex-row gap-3">
-                {StatusOptions.map(({ label, color, value }: StatusOptionType, index) => (
+            <div className="flex flex-row gap-3 w-full">
+                {statusOptions?.map(({ label, color, value }: StatusOptionType, index) => (
                     <div key={`${value}-${index}`} className="flex flex-col gap-4 flex-1">
                         <ColumnHeading title={label} color={color} />
-                        <DropContainer index={index} status={value} />
+                        <DropContainer index={index} status={label} />
                     </div>
                 ))}
             </div>

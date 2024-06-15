@@ -88,7 +88,7 @@ const MyTasks: React.FC = () => {
                     <Button>Sort</Button>
                 </div>
 
-                {updatedTasks.length &&
+                {!!Object?.keys?.(updatedTasks)?.length &&
                     Object.entries?.(updatedTasks)?.map(([dateTime, value], titleIndex) => (
                         <React.Fragment key={`title-myTasks-${titleIndex}`}>
                             <StyledHeading>{dateTime}</StyledHeading>

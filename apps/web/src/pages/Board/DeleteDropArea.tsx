@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
-import React, { DragEvent, useState } from 'react';
-import { useDragStatus } from '@/providers/TasksProvider';
+import React, { DragEvent, useReducer } from 'react';
+import { useDragStatus, useGetAllTasks } from '@/providers/TasksProvider';
 import { Trash2 } from 'lucide-react';
 import {
     AlertDialog,
@@ -13,10 +13,22 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { removeTask } from '@/service';
+import { toast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+
+type State = {
+    showAlert: boolean;
+    taskIdToDelete: string | null;
+};
+
+type Reducer = (state: State, newState: Partial<State>) => State;
 
 export const DeleteDropArea: React.FC = () => {
     const isDropZoneActive = useDragStatus();
-    const [showAlert, setShowAlert] = useState<boolean>(false);
+    const getAllUpdatedTasks = useGetAllTasks();
+    const setReducerState: Reducer = (state, newSate) => ({ ...state, ...newSate });
+    const [state, setState] = useReducer(setReducerState, { showAlert: false, taskIdToDelete: null });
 
     const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
         event.preventDefault();
@@ -24,14 +36,41 @@ export const DeleteDropArea: React.FC = () => {
 
     function handleFileDroppedOnDeleteField(event: DragEvent<HTMLDivElement>): void {
         event.preventDefault();
-        setShowAlert(true);
+        const data = event.dataTransfer.getData('text');
+        setState({ showAlert: true, taskIdToDelete: data });
     }
 
-    const handleCancel = () => setShowAlert(false);
+    const handleCancel = () => setState({ showAlert: false });
+
+    function handleSubmit(): void {
+        if (!state.taskIdToDelete) {
+            setState({ showAlert: false });
+            return;
+        }
+        removeTask(+state?.taskIdToDelete)
+            ?.then(() => {
+                setState({ showAlert: false, taskIdToDelete: null });
+
+                toast({
+                    title: 'Success',
+                    description: `Deleted successfully`,
+                });
+
+                getAllUpdatedTasks();
+            })
+            .catch((error) => {
+                toast({
+                    variant: 'destructive',
+                    title: 'Error',
+                    description: `Something happened while try to delete, ${error}`,
+                    action: <ToastAction altText="Try again">Try again</ToastAction>,
+                });
+            });
+    }
 
     return (
         <>
-            <AlertDialog open={showAlert}>
+            <AlertDialog open={state.showAlert}>
                 <AlertDialogTrigger asChild>
                     <div
                         className={cn(
@@ -59,7 +98,7 @@ export const DeleteDropArea: React.FC = () => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Continue</AlertDialogAction>
+                        <AlertDialogAction onClick={handleSubmit}>Continue</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
