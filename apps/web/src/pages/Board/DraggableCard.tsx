@@ -10,7 +10,7 @@ export const DraggableCard = ({ title, description, priority, id, status }: Task
     const setDragStatus = useSetDragStatus();
     const setIsDragActive = useSetDragActive();
     const handleDragStart = (e: DragEvent) => {
-        e.dataTransfer.setData('text/plain', id);
+        e.dataTransfer.setData('text/plain', id.toString());
         setDragStatus(true);
         setIsDragActive(true);
     };
@@ -23,7 +23,7 @@ export const DraggableCard = ({ title, description, priority, id, status }: Task
     return (
         <>
             {editable ? (
-                <AddTask {...{ title, description, priority, id, status }} setEditable={setEditable} />
+                <AddTask {...{ id, status }} setEditable={setEditable} />
             ) : (
                 <Card
                     draggable={true}
@@ -33,12 +33,11 @@ export const DraggableCard = ({ title, description, priority, id, status }: Task
                     onDragEnd={handleDragEnd}
                     onDoubleClickCapture={() => setEditable(true)}
                 >
-                    <CardHeader>
-                        <CardTitle>{title}</CardTitle>
-                        <CardDescription>{description}</CardDescription>
+                    <CardHeader className="py-3">
+                        <CardTitle className="text-lg">{title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p>Card Content</p>
+                        <CardDescription>{description}</CardDescription>
                     </CardContent>
                     <CardFooter>
                         <p>{priority}</p>

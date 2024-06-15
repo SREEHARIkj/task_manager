@@ -1,16 +1,20 @@
-import { TaskType } from '@/constants/const';
 import { cn } from '@/lib/utils';
 import React, { DragEvent, useState } from 'react';
-import { useSetDragStatus, useSetTasks, useTasks } from '@/providers/TasksProvider';
+import { useGetAllTasks, useSetDragStatus, useTaskStatuses, useTasks } from '@/providers/TasksProvider';
 import { AddTask } from './AddTask';
 import { DropContainerProps } from '.';
 import { DraggableCard } from './DraggableCard';
+import { updateTask } from '@/service';
 
 export const DropContainer: React.FC<DropContainerProps> = ({ index, status }) => {
     const [isActive, setActive] = useState<boolean>(false);
     const tasks = useTasks();
-    const setTasks = useSetTasks();
+    const getAllTask = useGetAllTasks();
     const setDragStatus = useSetDragStatus();
+
+    const taskStatusList = useTaskStatuses();
+
+    const statusId = taskStatusList?.find(({ label }) => label === status)?.id;
 
     const handleDragOver = (e: DragEvent) => {
         e.preventDefault();
@@ -21,13 +25,15 @@ export const DropContainer: React.FC<DropContainerProps> = ({ index, status }) =
         setActive(false);
     };
 
-    const handleDrop = (e: DragEvent) => {
+    const handleDrop = async (e: DragEvent) => {
         const data = e.dataTransfer.getData('text');
+        const currentTaskStatus = tasks?.find((task) => task?.id === +data)?.status;
+        const currentTaskStatusId = taskStatusList?.find(({ label }) => label === currentTaskStatus)?.id;
+
+        if (currentTaskStatusId === statusId) return;
+
         if (!!data && isActive) {
-            const updatedTask: TaskType[] | undefined = tasks?.map((task) =>
-                task.id === data ? { ...task, status: status } : task
-            );
-            updatedTask && setTasks?.(updatedTask);
+            statusId && updateTask({ id: data, payload: { statusId } })?.then(() => getAllTask());
         }
         setActive(false);
         setDragStatus(false);
@@ -40,7 +46,7 @@ export const DropContainer: React.FC<DropContainerProps> = ({ index, status }) =
             onDrop={handleDrop}
             onDropCapture={handleDrop}
             key={index}
-            className={cn('rounded-md h-dvh bg-opacity-15', isActive ? 'border border-1 border-blue-500' : '')}
+            className={cn('rounded-md h-dvh bg-opacity-15 w-full', isActive ? 'border border-1 border-blue-500' : '')}
             {...(isActive && {
                 style: {
                     background: `repeating-linear-gradient(
@@ -55,7 +61,7 @@ export const DropContainer: React.FC<DropContainerProps> = ({ index, status }) =
         >
             {tasks
                 ?.filter((task) => task.status === status)
-                .map((task, j) => <DraggableCard key={`${j}-task-Draggablecard`} {...task} status={status} />)}
+                .map((task, j) => <DraggableCard key={`${j}-task-DraggableCard`} {...task} status={status} />)}
             <AddTask status={status} />
         </div>
     );

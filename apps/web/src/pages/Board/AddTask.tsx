@@ -1,88 +1,136 @@
-import { TaskType } from '@/constants/const';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useSetTasks, useTasks } from '@/providers/TasksProvider';
-import moment from 'moment';
+import { useGetAllTasks, useTaskPriorities, useTaskStatuses, useTasks } from '@/providers/TasksProvider';
+import { addTask, updateTask } from '@/service';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+
+const initValue = {
+    title: '',
+    description: '',
+    statusId: null,
+    priorityId: null,
+};
 
 export const AddTask = ({
-    title,
-    description,
-    priority,
     id,
+    status: boardStatusHeading,
     setEditable,
-    status,
-}: Partial<TaskType & { setEditable: (params: boolean) => void; status: string }>) => {
+}: Partial<{ id: number; setEditable: (params: boolean) => void; status: string }>) => {
     const [adding, setAdding] = useState<boolean>(false);
-    const [updatedData, setUpdatedData] = useState<{ title: string; description: string } | TaskType>();
+    const [updatedData, setUpdatedData] = useState<{
+        title: string | null;
+        description: string | null;
+        statusId: number | null;
+        priorityId: number | null;
+    }>(initValue);
     const isEditable = !!id;
     const tasks = useTasks();
-    const setTasks = useSetTasks();
+    const getAllUpdatedTasks = useGetAllTasks();
+    const { toast } = useToast();
+
+    const taskStatusList = useTaskStatuses();
+    const taskPriorityList = useTaskPriorities();
+
+    const taskData = tasks?.find((t) => t.id === id);
+
+    const { title, description, status, priority } = taskData ?? {
+        title: '',
+        description: '',
+        status: '',
+        priority: '',
+    };
+
+    const statusList = taskStatusList?.map((status) => ({ value: status.id.toString(), label: status.label })) ?? [
+        { value: '', label: '' },
+    ];
+    const priorityList = taskPriorityList?.map((priority) => ({
+        value: priority.id.toString(),
+        label: priority.label,
+    })) ?? [{ value: '', label: '' }];
+
+    const statusData = statusList?.find((s) => s.label === status);
+    const priorityData = priorityList?.find((p) => p.label === priority);
 
     useEffect(() => {
+        const statusId = taskStatusList?.find((s) => s.label === boardStatusHeading)?.id;
+        setUpdatedData((pv) => ({ ...pv, statusId: statusId ?? null }));
         setAdding(isEditable);
+
+        isEditable &&
+            setUpdatedData({
+                title,
+                description,
+                statusId: Number(statusData?.value) ?? null,
+                priorityId: Number(priorityData?.value) ?? null,
+            });
     }, [isEditable]);
 
-    function handleFormSubmit(e: FormEvent<HTMLFormElement>): void {
+    async function handleFormSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault();
 
         if (isEditable) {
-            const dataToSet = tasks?.map((t) => (id !== t.id ? t : { ...t, ...updatedData }));
-            dataToSet && setTasks?.(dataToSet);
-            setAdding?.(false);
-            setEditable?.(false);
+            await updateTask({ id: id.toString(), payload: { ...updatedData } })
+                ?.then(() => {
+                    setAdding?.(false);
+                    setEditable?.(false);
+                    getAllUpdatedTasks();
+                    toast({
+                        description: 'The task has been updated',
+                    });
+                })
+                .catch((err) =>
+                    toast({
+                        variant: 'destructive',
+                        title: 'Uh oh! Something went wrong.',
+                        description: `Error code: ${err}`,
+                    })
+                );
             return;
         }
 
-        setTasks?.(
-            (pv) =>
-                [
-                    ...pv,
-                    {
-                        id: (pv.length + 1).toString(),
-                        status: status ?? 'Todo',
-                        dueDate: '',
-                        priority: 'high',
-                        ...updatedData,
-                    },
-                ] as TaskType[]
-        );
-
-        setAdding?.(false);
+        await addTask(updatedData)
+            ?.then(() => {
+                setAdding?.(false);
+                getAllUpdatedTasks();
+                toast({ description: 'New task has been created!' });
+            })
+            .catch((err) =>
+                toast({
+                    variant: 'destructive',
+                    title: 'Uh oh! Something went wrong.',
+                    description: `Error code: ${err}`,
+                })
+            );
     }
 
-    function handleOnChange(event: ChangeEvent<HTMLInputElement>): void {
+    function handleOnChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         const { name, value } = event.target;
-        if (isEditable) {
-            const taskToEdit = tasks?.find(({ id: _id }) => _id === id);
-            setUpdatedData({ ...taskToEdit, [name]: value, createdAt: moment(new Date()).toISOString() } as TaskType);
-            return;
-        }
-        setUpdatedData((pv) => ({ ...pv, [name]: value || '' }) as { title: string; description: string } | undefined);
+        setUpdatedData((pv) => ({ ...pv, [name]: value || '' }));
     }
 
     return (
         <div>
             {adding ? (
                 <Card className="mb-2">
-                    <CardHeader>
-                        <CardTitle>{isEditable ? 'Update' : 'Add'} Task</CardTitle>
+                    <CardHeader className="py-3">
+                        <CardTitle className="text-lg">{isEditable ? 'Update' : 'Add'} Task</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form className="flex flex-col gap-y-2" onSubmit={handleFormSubmit}>
                             <Input
                                 type="text"
                                 placeholder="Enter task name"
-                                defaultValue={title}
+                                defaultValue={title ?? undefined}
                                 name="title"
                                 onChange={handleOnChange}
                             />
-                            <Input
-                                type="text"
+                            <Textarea
                                 placeholder="Enter description..."
-                                className="h-24 placeholder:absolute placeholder:top-4 placeholder:left-2"
-                                defaultValue={description}
+                                className="h-24"
+                                defaultValue={description ?? undefined}
                                 name="description"
                                 onChange={handleOnChange}
                             />

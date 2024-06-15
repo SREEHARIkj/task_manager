@@ -1,7 +1,6 @@
 * Drag card design fix 
 * Socket issue with Docker container , not able to access socket while running application through docker container 
-* Delete Update create api integration from front end
-* Postgres integration for  user and task management system.
+* Postgres integration for  user and 
 * Auth0 integration 
 * turbo repo configuration updates
 * Ai description generation 
